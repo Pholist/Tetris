@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="compilation tetris "   basedir="." default="dist" xmlns:ivy="antlib:org.apache.ivy.ant" >
+    <property name="src.dir" value="src"></property>
+    <property name="obj.dir" value="bin"></property>
+    <property name="libs.dir" value="lib"></property>
+    <property name="version" value="1"></property>
+    <property name="main-class" value="fr.ubo.tetris.Tetris"></property>
+    <property name="compile.classpath" value="${basedir}/ lib/commons-lang3-3.5.jar"></property>
+    <property name="test.results.dir" value="${basedir}/test-results"></property>
+    <property name="test-reports.dir" value="${basedir}/test-reports"></property>
+    <property name="doc" value="${basedir}/javadoc"/>
+
+    <target name="retrieve" description="--> retrieve dependencies with ivy" >
+        <ivy:settings />
+        <ivy:resolve />
+        <ivy:retrieve pattern=" ${libs.dir}/[artifact].[ext]" sync="true" type="jar"/>
+    </target>
+
+    <target name="clean">
+        <echo message= "Suppression des fichiers issus de la compilation" />
+        <delete dir="${basedir}/bin" />
+        <delete dir="${basedir}/ lib"/>
+        <mkdir dir="${basedir}/ lib"/>
+    </target>
+
+    <path id="compilerpath">
+        <fileset dir=" lib">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="bin"/>
+    </path>
+
+    <target name="compile" depends="clean,retrieve">
+        <mkdir dir="${basedir}/bin"></mkdir>
+        <javac includeantruntime="false" srcdir="${basedir}/src" destdir="${basedir}/bin"  >
+            <classpath refid="compilerpath"/>
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile">
+        <manifest file="Manifest.ml">
+            <attribute name="main-class" value="${main-class}" />
+            <attribute name="implementation-version" value="${version}" />
+            <attribute name="build-by" value ="user"></attribute>
+            <attribute name="class-path" value="Tetris.jar"></attribute>
+        </manifest>
+<!--        <jar jarfile="${basedir}/${obj.dir}/fr/Tetris.jar"  manifest="${obj.dir}/fr/Manifest.ml"/>-->
+        <jar jarfile="Tetris.jar" basedir="${obj.dir}"  manifest="Manifest.ml">
+            <zipgroupfileset dir=" lib/">
+                <include name="**/*.jar"/>
+            </zipgroupfileset>
+        </jar>
+    </target>
+
+    <target name="compile-test" >
+
+        <javac srcdir="${basedir}/test" destdir="${obj.dir}" >
+            <classpath >
+                <pathelement location="${basedir}/ lib/commons-lang3-3.5.jar"/>
+                <pathelement location="${basedir}/ lib/junit-4.13.jar"/>
+                <pathelement location="${basedir}/ lib/hamcrest-core-1.3.jar"/>
+                <pathelement location="${obj.dir}"/>
+            </classpath>
+
+        </javac>
+
+    </target>
+
+    <target name="test" depends="compile-test">
+        <junit  fork="yes" printsummary="withOutAndErr"  haltonfailure="no">
+            <!-- Project classpath, must include junit.jar -->
+            <classpath >
+                <pathelement location="${basedir}/ lib/commons-lang3-3.5.jar"/>
+                <pathelement location="${basedir}/ lib/junit-4.13.jar"/>
+                <pathelement location="${basedir}/ lib/hamcrest-core-1.3.jar"/>
+                <pathelement location="${obj.dir}"/>
+            </classpath>
+
+            <!-- test class -->
+            <classpath location="fr.ubo.tetris.Tetris" />
+
+            <test name="fr.ubo.tetris.TestShape" haltonfailure="no"  todir="${test.results.dir}" >
+                <formatter type="plain"/>
+                <formatter type="xml"/>
+            </test>
+
+        </junit>
+    </target>
+
+    <target name="test-reports" depends="test">
+        <delete dir="${test-reports.dir}"></delete>
+        <mkdir dir="${test-reports.dir}"></mkdir>
+        <junitreport todir="${test-reports.dir}">
+            <fileset dir="${basedir}/test.results">
+                <include name="TEST*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test-reports.dir}"/>
+
+        </junitreport>
+
+
+    </target>
+
+    <target name="javadoc" depends="compile">
+
+        <delete dir="${doc}" />
+        <mkdir dir="${doc}"></mkdir>
+        <javadoc sourcepath="${basedir}/src" destdir="${doc}"/>
+
+    </target>
+
+    <target name="all" depends="clean,compile,test,javadoc" >
+
+    </target>
+
+</project>
