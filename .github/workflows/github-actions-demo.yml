@@ -13,8 +13,12 @@ jobs:
         with:
           java-version: '13'
           distribution: 'adopt'
-      - name: Build with Ant
-        run: ant -noinput -buildfile build.xml dist
+      - name: install Ant
+        run: ant -version
+#       - name: Build with Ant
+#         run: ant -noinput -buildfile build.xml dist
+  
+      
       
 #  test:
 #     name: Running Units Tests
