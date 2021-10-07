@@ -15,8 +15,10 @@ jobs:
           distribution: 'adopt'
       - name: install Ant
         run: ant -version
-#       - name: Build with Ant
-#         run: ant -noinput -buildfile build.xml dist
+      - env:
+         JAVA_HOME: C:\hostedtoolcache\windows\Java_Adopt_jdk\13.0.2-8.1\x64
+      - name: Build with Ant
+        run: ant -noinput -buildfile build.xml dist
   
       
       
