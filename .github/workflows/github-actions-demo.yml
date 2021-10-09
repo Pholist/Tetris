@@ -19,7 +19,13 @@ jobs:
         run: ant -lib C:/Users/salma/.ant/lib dist
       - name: Build with Ant
         run: ant -noinput -buildfile build.xml dist
-  
+      
+  test:
+    needs: build
+    runs-on: windows-latest
+    
+    steps:
+      - run: javac -Xlint -d bin/ -classpath "./ lib/junit-4.13.jar";"./ lib/hamcrest-core.jar";"./bin"  test/fr/isen/tetris/TestShape.java
       
       
 #  test:
@@ -34,5 +40,6 @@ jobs:
 #       with:
 #         node-version: ${{ matrix.node-version }}
 #     - name: Test
+#        run: javac -Xlint -d bin/ -classpath "./ lib/junit-4.13.jar";"./ lib/hamcrest-core.jar";"./bin"  test/fr/isen/tetris/TestShape.java
 #       run: javac -cp junit-4.13.jar;hamcrest-core-1.3.jar;. org.junit.runner.JUnitCore Tetris
       
