@@ -72,7 +72,7 @@
             <!-- Project classpath, must include junit.jar -->
             <classpath >
                 <pathelement location="${basedir}/ lib/commons-lang3-3.5.jar"/>
-                <pathelement location="${basedir}/ lib/junit.jar"/>
+                <pathelement location="${basedir}/ lib/junit-4.13.jar"/>
                 <pathelement location="${basedir}/ lib/hamcrest-core-1.3.jar"/>
                 <pathelement location="${obj.dir}"/>
             </classpath>
