@@ -25,7 +25,8 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - run: javac -Xlint -d bin/ -classpath "./ lib/junit-4.13.jar";"./ lib/hamcrest-core.jar";"./bin"  test/fr/isen/tetris/TestShape.java
+      - run: javac -d ./bin -cp "./bin;./ lib/junit.jar;./ lib/hamcrest-core-1.3.jar"  "./test/fr/isen/tetris/TestShape.java"
+
       
       
 #  test:
