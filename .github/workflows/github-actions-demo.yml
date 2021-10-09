@@ -25,6 +25,8 @@ jobs:
     runs-on: windows-latest
     
     steps:
+      - name: get ivy
+        run: choco install ivy
       - name: install Ant
         run: ant -lib C:/Users/salma/.ant/lib dist
       - name: test buil.xml
