@@ -13,6 +13,8 @@ jobs:
         with:
           java-version: '13'
           distribution: 'adopt'
+      - name: get ivy
+        run: apt-get install ivy
       - name: install Ant
         run: ant -lib C:/Users/salma/.ant/lib dist
       - name: Build with Ant
